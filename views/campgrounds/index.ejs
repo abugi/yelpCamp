@@ -1,0 +1,35 @@
+<% include ../partials/header %>
+
+
+<div class="container">
+<header class="jumbotron">
+    <div>
+        <% if(!currentUser){ %>
+            <h2>WELCOME TO YELP CAMP</h2>
+        <% }else{ %>
+            <h2>WELCOME TO YELP CAMP: <%= currentUser.username.toUpperCase() %></h2>
+        <% } %>
+        <h4>Our intention is not to please you, our intention is to amaze you</h4>
+        <p><a class="btn btn-primary btn-lg" active href="/">Back to home</a></p>
+     <div>
+</header>
+
+<div class="row text-center" style= "display: flex; flex-wrap: wrap">
+    <% campgrounds.forEach(function(camps){ %>
+        <div class="col-md-3 col-sm-6">
+            <div class="thumbnail">
+                <img src="<%= camps.image %>">
+                <div class="caption"><h4><%= camps.name %></h4></div>
+                <p><a href="/campgrounds/<%= camps._id %>" class="btn btn-primary btn-xs">More Info</a></p>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+
+
+<div><a class="btn btn-primary btn-xs " active href="/Campgrounds/new">Add new camp site</a></div>
+
+</div>
+
+<% include ../partials/footer %>
