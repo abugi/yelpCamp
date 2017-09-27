@@ -1,0 +1,1 @@
+This is an application that helps you find the best camping sites and tents for your vacations and casual hangouts.
