@@ -20,8 +20,8 @@ var campgroundRoutes = require("./routes/campground");
 
 
 //seedDB(); //calling the seed.js file
-//mongoose.connect("mongodb://localhost/yelp_camp");
-mongoose.connect("mongodb://abugi:jankara@ds147864.mlab.com:47864/yelpcamp");
+mongoose.connect("mongodb://localhost/yelp_camp");
+// mongoose.connect("mongodb://abugi:jankara@ds147864.mlab.com:47864/yelpcamp");
 
 
 //PASSPORT CONFIGURATION
