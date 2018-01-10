@@ -12,11 +12,14 @@
           </div>
           <div class="col-md-9">
                <div class="thumbnail">
-                    <img class="img-responsive" src="<%= camps.image %>">
+                    <!-- <img class="img-responsive" src="<%= camps.image %>"> -->
                     <div class="caption-full">
                          <h4 class="pull-right">$9.00/night</h4>
                          <h4><a><%= camps.name %></a></h4>
-                         <p><%= camps.description %></p>
+                         <p><img src="<%= camps.image %>"></p>
+                         <p>
+                              <%= camps.description %>
+                         </p>
                          <p><em>submitted by: <%= camps.author.username %></em></p>
                          <% if(currentUser && camps.author.id.equals(currentUser._id)){ %>
                               <a class="btn btn-xs btn-warning "href="/campgrounds/<%= camps._id %>/edit">Edit</a>

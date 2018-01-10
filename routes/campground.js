@@ -19,16 +19,18 @@ router.post("/campgrounds", isLoggedIn, function(req, res){
     var name = req.body.name;
     var image = req.body.image;
     var description = req.body.description;
+    var upload = req.body.upload;
     var author = {
         id: req.user._id,
         username: req.user.username
     }
-    var newcampground = {name: name, image: image, description: description, author: author}
+    var newcampground = {name: name, image: image, description: description, author: author, upload: upload}
     // Create a new campground and save to database
     campground.create(newcampground, function(error, newlyCreated){
         if(error){
             console.log(error)
         }else{
+            console.log(newcampground)
             res.redirect("/campgrounds")
         }
     });
