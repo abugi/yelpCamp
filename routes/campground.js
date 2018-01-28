@@ -1,6 +1,29 @@
 var express = require("express");
 var router  = express.Router();
 var campground = require("../models/campground");
+var multer = require('multer');
+var env = require('dotenv/config');
+var storage = multer.diskStorage({
+    filename: function (req, file, callback) {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({ storage: storage, fileFilter: imageFilter })
+
+var cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 //INDEX - shows the main page
 router.get("/campgrounds", function(req, res){
@@ -14,25 +37,23 @@ router.get("/campgrounds", function(req, res){
 });
    
 
-//CREATE - page that creates a enw record for DB
-router.post("/campgrounds", isLoggedIn, function(req, res){
-    var name = req.body.name;
-    var image = req.body.image;
-    var description = req.body.description;
-    var upload = req.body.upload;
-    var author = {
-        id: req.user._id,
-        username: req.user.username
-    }
-    var newcampground = {name: name, image: image, description: description, author: author, upload: upload}
-    // Create a new campground and save to database
-    campground.create(newcampground, function(error, newlyCreated){
-        if(error){
-            console.log(error)
-        }else{
-            console.log(newcampground)
-            res.redirect("/campgrounds")
+//CREATE - page that creates new record for DB
+router.post("/campgrounds", isLoggedIn, upload.single('image'), function (req, res) {
+    cloudinary.uploader.upload(req.file.path, function (result) {
+        // add cloudinary url for the image to the campground object under image property
+        req.body.campground.image = result.secure_url;
+        // add author to campground
+        req.body.campground.author = {
+            id: req.user._id,
+            username: req.user.username
         }
+        campground.create(req.body.campground, function (err, campground) {
+            if (err) {
+                req.flash('error', err.message);
+                return res.redirect('back');
+            }
+            res.redirect('/campgrounds/' + campground.id);
+        });
     });
  });
 
