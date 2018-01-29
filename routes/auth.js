@@ -88,14 +88,14 @@ router.post('/forgot', function (req, res, next) {
             var mailOptions = {
                 to: user.email,
                 from: 'abugiboi@gmail.com',
-                subject: 'Node.js Password Reset',
-                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                subject: 'Yelp Camp Password Reset',
+                text: 'You are receiving this because you have requested the reset of the password for your account.\n\n' +
                     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                     'http://' + req.headers.host + '/reset/' + token + '\n\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
             };
             smtpTransport.sendMail(mailOptions, function (err) {
-                console.log('mail sent');
+                // console.log('mail sent');
                 req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
                 done(err, 'done');
             });
@@ -146,13 +146,13 @@ router.post('/reset/:token', function (req, res) {
                 service: 'Gmail',
                 auth: {
                     user: 'abugiboi@gmail.com',
-                    pass: 'jankara1987'
+                    pass: GMAIL_PASSWORD
                 }
             });
             var mailOptions = {
                 to: user.email,
                 from: 'abugiboi@mail.com',
-                subject: 'Your password has been changed',
+                subject: 'Your password has been changed on Yelp Camp',
                 text: 'Hello,\n\n' +
                     'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
             };
